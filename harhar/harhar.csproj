@@ -76,9 +76,9 @@
     <StartupObject>Harhar.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="HarNet, Version=0.9.0.8, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\HarNet.0.9.0.8\lib\net45\HarNet.dll</HintPath>
+    <Reference Include="HarNet, Version=0.9.0.10, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\HarNet.0.9.0.10\lib\net45\HarNet.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
