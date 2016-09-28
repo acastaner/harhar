@@ -1,15 +1,10 @@
 ﻿using Harnet;
-using Harnet.Dto;
 using Harnet.Net;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.Serialization.Json;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Harhar
@@ -22,7 +17,7 @@ namespace Harhar
         static List<int> usedConnectionIds = new List<int>();
         static int errorCount = 0;
         static HarharLog harharLog;
-        
+
         static List<string> urls = new List<string>();
         static List<string> actionList = new List<string>();
 
@@ -56,7 +51,7 @@ namespace Harhar
                     Directory.CreateDirectory(workingDirectory);
 
                 harharLog = new HarharLog(workingDirectory + "run.log");
-                
+
                 foreach (string path in filePaths)
                 {
                     HandleHarFile(workingDirectory, path);
@@ -74,7 +69,7 @@ namespace Harhar
                 Console.WriteLine("No HAR file found within the current directory. Please specify a file or directory holding files.");
                 Console.WriteLine("Example: harhar.exe <HAR file or directory>");
             }
-            
+
             Console.Write("Parsing complete. Press any key to exit.");
             Console.ReadKey();
         }
@@ -86,7 +81,8 @@ namespace Harhar
 
         private static void HandleHarFile(string workingDirectory, string filePath)
         {
-            Log datLog = HarConverter.ImportHarContent(File.ReadAllText(filePath));
+            string content = File.ReadAllText(filePath);
+            Log datLog = HarConverter.ImportHarContent(content);
             Console.WriteLine("Total Response size: " + datLog.CumulatedResponseSize + " bytes (headers: " + datLog.CumulatedResponseHeaderSize + " ; bodies: " + datLog.CumulatedResponseBodySize + " )");
             Console.WriteLine("Total Request size: " + datLog.CumulatedRequestSize + " bytes (headers: " + datLog.CumulatedRequestHeaderSize + " ; bodies: " + datLog.CumulatedRequestBodySize + " )");
             Console.WriteLine("Found " + datLog.Entries.Count + " entries in log.");
@@ -157,10 +153,10 @@ namespace Harhar
 
         private async static void HandleLogFile(Log harLog, string workingDirectory, string logFileName)
         {
-            workingDirectory += logFileName + Path.DirectorySeparatorChar;            
-            
+            workingDirectory += logFileName + Path.DirectorySeparatorChar;
+
             actionList.Add("### Generated on " + DateTime.Now + " by HarHar tool ###");
-            
+
             Console.WriteLine("Creating working directory at " + workingDirectory);
             Directory.CreateDirectory(workingDirectory);
 
@@ -213,9 +209,9 @@ namespace Harhar
             entry.Request.Headers.Remove("Path");
             entry.Request.Headers.Remove("Version");
             entry.Request.Headers.Remove("Scheme");
-            entry.Request.Headers.Remove("Method");            
+            entry.Request.Headers.Remove("Method");
             entry.Request.Headers.Remove("Connection");
-            
+
             // Chrome adds this in SSL
             entry.Request.Headers.Remove(":host");
             entry.Request.Headers.Remove(":path");
@@ -279,7 +275,7 @@ namespace Harhar
                     errorCount++;
                 }
             }
-            
+
         }
         /// <summary>
         /// Returns a the Request.Url property cleaned from any HTTP prefix, query string or special characters
@@ -300,7 +296,7 @@ namespace Harhar
             return ret.ToString();
         }
         /// <summary>
-        /// This method will remove protocol (http(s)://) prefix from URLs 
+        /// This method will remove protocol (http(s)://) prefix from URLs
         /// <param name="input"></param>
         /// <returns></returns>
         private static string StripProtocolPrefix(string input)
